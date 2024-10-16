@@ -70,6 +70,7 @@ Usar este modelo produciría que rechazáramos 84% del total de créditos
 
 Dentro de la base de datos compartida, se encontró que un 21% de los clientes tienen un valor de Tenure >= 60. La tasa de Churn para este grupo de clientes es de 37%. Tomando esto en cuenta, se decidió filtrar este grupo de clientes de alta permanencia, que parece tener un comportamiento diferente en terminos de Churn, debido a vinculación, fidelidad y/o costos de cambio. Entonces se corrieron los modelos filtrando clientes con Tenure < 60, obteniendo los siguientes resultados:
 
+Clientes con Tenure < 60
                 Model Specificity Sensitivity  Accuracy       AUC
 1       Decision Tree   0.6346801   0.6484375 0.6410488 0.6091056
 2       Random Forest   0.6851852   0.6035156 0.6473779 0.6967313
@@ -78,19 +79,37 @@ Dentro de la base de datos compartida, se encontró que un 21% de los clientes t
 
 El valor de AUC obtenido por el modelo Logistic Regression tiene una AUC de 0.699, muy cercana al mínimo requerido de 70%. Adicionalmente muestra unos valores de Specificity y Sensitivity balanceados. Este modelo podría ser considerado como una alternativa, resultando en lo siguiente:
 
+Confusion Matrix Logistic Regression
           Reference
 Prediction  No Yes Total
        No  315 186 501
        Yes 197 408 605
      Total 512 594 1,106
 
-El modelo Logistic Regression podría predecir efectivamente 68% de los casos de Churn, pero 38% de los rechazos serían erróneos.
+Es decir, el modelo Logistic Regression, haría las siguientes predicciones:
+- Para 54% de los créditos predecirá que harán churn. De estos, 67.4% efectivamente lo harán y 32.6% no (es decir, serán rechazados erroneamente por el modelo). Esto equivale a 17.6% de los créditos colocados en el período respectivo.
+- Para el otro 46% de los créditos predecirá que no hará churn. De estos,62.8% no lo harán y 37.1% si (es decir, se dejarán pasar como buenos, pero eventualmente harán Churn). Esto equivale a 17.0% de los créditos colocados en el período respectivo.
+
+Haciendo un comparativo para un periodo, suponiendo una adquision de 500 nuevos créditos:
+
+Actual
+Colocados Churn NoChurn %Churn
+500       269   231     53.8%
+
+Con Modelo
+Solicitados Colocados Churn NoChurn %Churn
+500         226       84    142     37.2%    
+            Rechazados
+            274
+
 
 Adicional, el modelo de Decision Tree resultante para este set de datos consta de dos variables y resulta en 3 niveles de probabilidad de Churn, tal como se puede ver en el gráfico correspondiente.
 
-Ambos modelos arrojan un valor probabilístico, el Decision Tree resultante en 3 niveles la Logistic Regression con probabilidad continua. Una alternativa que se puede proponer es usar el modelo para fines de personalización de la tasa de interés, colocando a mayores tasas aquellos créditos más riesgosos.
+Ambos modelos arrojan un valor probabilístico, el Decision Tree resultante en 3 niveles la Logistic Regression con probabilidad continua. Una alternativa que propone, dada la pérdida de créditos en cartera que el modelo directo generaría es usar el modelo para fines de ajuste de la tasa de interés, colocando a mayores tasas aquellos créditos más riesgosos.
 
-Con el fin de avanzar rapidamente con esta implementación, se propone avanzar en dos fases, implementando el modelo Decision Tree como reglas de negocio, ofreciendo una de tres tasas diferenciadas según el nivel de riesgo calculado. En paralelo se prepararía el deployment del modelo de Logistic Regression.
+Con el fin de avanzar rapidamente con esta implementación, se propone avanzar en dos fases, implementando el modelo Decision Tree como reglas de negocio, ofreciendo una de tres tasas diferenciadas según el nivel de riesgo calculado. En paralelo se prepararía el deployment del modelo de Logistic Regression, con resultado probabilístico para su impacto en el precio.
+
+Adicionalmente, agregando más datos demográficos y comportamentales, será posible llegar a un modelo más robusto que pueda ser usado como discriminador. 
 
 
 

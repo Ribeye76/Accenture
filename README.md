@@ -92,15 +92,15 @@ Es decir, el modelo Logistic Regression, haría las siguientes predicciones:
 
 Haciendo un comparativo para un periodo, suponiendo una adquision de 500 nuevos créditos:
 
-Actual
+*Actual
 Colocados Churn NoChurn %Churn
 500       269   231     53.8%
 
-Con Modelo
-Solicitados Colocados Churn NoChurn %Churn
-500         226       84    142     37.2%    
-            Rechazados
-            274
+*Con Modelo
+Solicitados Colocados  Churn NoChurn %Churn
+500         226        84    142     37.2%    
+            Rechazados Churn NoChurn %Churn
+            274        184   90      67.2%
 
 
 Adicional, el modelo de Decision Tree resultante para este set de datos consta de dos variables y resulta en 3 niveles de probabilidad de Churn, tal como se puede ver en el gráfico correspondiente.
